@@ -4,3 +4,8 @@ __pycache__/
 example_fastq.py
 utils/__pycache__/
 .ipynb_checkpoints/
+filtered/
+output.fasta
+protein_list.txt
+example_blast_results.txt
+example_multiline_fasta.fasta
