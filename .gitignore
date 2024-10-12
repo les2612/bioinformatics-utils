@@ -9,3 +9,4 @@ output.fasta
 protein_list.txt
 example_blast_results.txt
 example_multiline_fasta.fasta
+example_fastq.fastq
