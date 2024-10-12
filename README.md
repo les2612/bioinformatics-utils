@@ -1,6 +1,6 @@
 # bioinformatics-utils
 
-**bioinformatics-utils** is a comprehensive toolkit for performing basic operations and analyses on DNA and RNA sequences. It provides functionality for filtering FASTQ sequences based on GC content, sequence length, and quality score, as well as utilities for sequence transformations like transcription, reverse complement, palindrome checking, and more.
+**bioinformatics-utils** bioinformatics-utils is a comprehensive toolkit for performing basic operations and analyses on DNA and RNA sequences. It provides functionality for filtering FASTQ sequences based on GC content, sequence length, and quality score, as well as utilities for sequence transformations like transcription, reverse complement, palindrome checking, and more. It also includes utility functions for processing FASTA and BLAST output files.
 
 ## Authors:
 - **Software Development**: [Your Name], [Your Institution]
@@ -79,6 +79,15 @@ melting_temperature: Calculates the melting temperature of a DNA sequence.
 change_sequence: Changes the case of the sequence (e.g., uppercase, lowcase).
 reverse: Reverses the sequence.
 
+3. **Convert FASTA Multiline to Single Line:**
+The function convert_multiline_fasta_to_oneline() reads a multi-line FASTA file where sequences may be broken into multiple lines and converts it to a single-line FASTA format, where each sequence appears on a single line.
+
+**How to Run:**
+You can provide an input FASTA file to convert and optionally provide an output file for saving the result. If the output file is not provided, the result will be printed to the terminal.
+
+4. **Parse BLAST Output:**
+The function parse_blast_output extracts the top protein name from each query in BLAST output files.
+
 ## Examples
 
 1. FASTQ Filtering:
@@ -86,29 +95,59 @@ reverse: Reverses the sequence.
 ```python
 from bioinformatics_utils import filter_fastq
 
-sequences = {
-    "@SEQ_ID1": ("ATGCGTACGTAGCT", "IIIIIIIIIIIIII"),
-    "@SEQ_ID2": ("GGCTTACGATCGA", "HHHHHHHHHHHHHH"),
-}
-
-
-filtered = filter_fastq(sequences, gc_bounds=(40, 60), quality_threshold=30)
-print(filtered)
+input_fastq = "input_file.fastq"
+output_fastq = "filtered_output.fastq"
+filter_fastq(input_fastq, output_fastq, gc_bounds=(40, 60), length_bounds=(50, 200), quality_threshold=30)
 ```
 
 2. DNA/RNA Sequence Manipulation:
 
 ```python
-from bioinformatics_utils import filter_fastq
+from bioinformatics_utils import run_dna_rna_tools
 
-sequences = {
-    "@SEQ_ID1": ("ATGCGTACGTAGCT", "IIIIIIIIIIIIII"),
-    "@SEQ_ID2": ("GGCTTACGATCGA", "HHHHHHHHHHHHHH"),
-}
+result = run_dna_rna_tools("ATGCGTACG", "transcribe")
+print(result)  
 
-filtered = filter_fastq(sequences, gc_bounds=(40, 60), quality_threshold=30)
-print(filtered)
+result = run_dna_rna_tools("ATGCGTACG", "reverse_complement")
+print(result)  
+
+result = run_dna_rna_tools("ATCGAT", "is_palindrome")
+print(result)  
 ```
+
+3. Convert FASTA Multiline to Single Line:
+
+The bio_files_processor.py is part of the bioinformatics-utils package and provides two key functions: convert_multiline_fasta_to_oneline() 
+
+```python
+from bioinformatics_utils.bio_files_processor import convert_multiline_fasta_to_oneline
+
+input_fasta = "example_multiline_fasta.fasta"
+output_fasta = "output.fasta"
+
+convert_multiline_fasta_to_oneline(input_fasta, output_fasta)
+```
+
+4. Parse BLAST Output:
+
+```python
+from bioinformatics_utils.bio_files_processor import parse_blast_output
+
+input_file = "example_blast_results.txt"
+output_file = "protein_list.txt"
+
+parse_blast_output(input_file, output_file)
+```
+5. Running through the terminal
+The script bio_files_processor.py contains two functions: convert_multiline_fasta_to_oneline and parse_blast_output, which can be selected and run through the terminal
+
+```bash
+python bio_files_processor.py
+```
+Follow the prompt to select the function you want to run:
+
+- Enter 1 to run convert_multiline_fasta_to_oneline.
+- Enter 2 to run parse_blast_output.
 
 
 ## FAQ
@@ -120,6 +159,16 @@ A: You can pass both the gc_bounds and quality_threshold parameters to filter_fa
 
 Q: What types of sequences are supported?
 A: bioinformatics-utils supports both DNA and RNA sequences for various operations like transcription and complement generation.
+
+Q: Can I convert multi-line FASTA files to a single-line format?
+A: Yes, by using the convert_multiline_fasta_to_oneline() function, you can convert multi-line FASTA files so that each sequence appears on a single line. This function can be run through the terminal or used programmatically within your scripts.
+
+Q: How do I extract the top protein names from BLAST output files?
+A: You can use the parse_blast_output() function to extract the top protein names for each query from a BLAST output file. The function supports exporting the results to a file or printing them to the terminal.
+
+Q: Is it possible to run bioinformatics-utils functions directly from the terminal?
+A: Yes! You can run filter_fastq, convert_multiline_fasta_to_oneline, and parse_blast_output directly from the terminal. We've provided example scripts in the documentation that show how to set up these functions to run from the command line.
+
 
 ## Citation
 If you use bioinformatics-utils in your research, please cite this repository and the following publication:
