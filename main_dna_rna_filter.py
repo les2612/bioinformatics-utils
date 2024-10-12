@@ -2,34 +2,36 @@ from utils.dna_rna_helper import (
     transcribe, reverse, complement, reverse_complement, gc_content,
     is_palindrome, melting_temperature, change_sequence
 )
-from utils.filter_helper import avg_quality, gc_content as filter_gc_content
-from typing import Dict, Tuple, Any, List, Union
+from utils.filter_helper import avg_quality, read_fastq as fastq_to_dict, \
+    write_fastq, gc_content as filter_gc_content
+from typing import Tuple, Any, List, Union
 
 
 def filter_fastq(
-    seqs: Dict[str, Tuple[str, str]],
+    input_fastq: str,
+    output_fastq: str,
     gc_bounds: Tuple[float, float] = (0, 100),
     length_bounds: Tuple[int, int] = (0, 2**32),
     quality_threshold: float = 0
-) -> Dict[str, Tuple[str, str]]:
+) -> None:
     """
-    Filters reads based on GC content, sequence length, and average quality.
+    Filters reads based on GC content, sequence length, and average quality,
+    and writes filtered reads to a file.
 
     Arguments:
-    - seqs: Dictionary where the key is the sequence name, and the value is
-      a tuple (sequence, quality).
+    - input_fastq: Path to the input FASTQ file.
+    - output_fastq: Path to the output FASTQ file.
     - gc_bounds: Range for the percentage of GC content (default is (0, 100)).
     - length_bounds: Range for the sequence length (default is (0, 2**32)).
     - quality_threshold: Threshold for the average quality of the read
       (default is 0).
 
     Returns:
-    - A dictionary containing only those reads that meet all the filtering
-      conditions.
+    - None. Writes the filtered sequences to the output FASTQ file.
     """
 
-    # If a single value is passed for gc_bounds or length_bounds,
-    # convert it to a range
+    seqs = fastq_to_dict(input_fastq)
+
     if isinstance(gc_bounds, (int, float)):
         gc_bounds = (0, gc_bounds)
     if isinstance(length_bounds, (int, float)):
@@ -38,18 +40,16 @@ def filter_fastq(
     filtered_seqs = {}
 
     for name, (seq, quality) in seqs.items():
-        # Calculate GC content, length, and average quality
         gc = filter_gc_content(seq)
         length = len(seq)
         avg_qual = avg_quality(quality)
 
-        # Apply filters: GC content, length, and quality
         if (gc_bounds[0] <= gc <= gc_bounds[1] and
                 length_bounds[0] <= length <= length_bounds[1] and
                 avg_qual >= quality_threshold):
             filtered_seqs[name] = (seq, quality)
 
-    return filtered_seqs
+    write_fastq(output_fastq, filtered_seqs)
 
 
 def run_dna_rna_tools(*args: str, **kwargs: Any) -> Union[str, List[str]]:
