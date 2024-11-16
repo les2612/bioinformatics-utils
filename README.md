@@ -178,4 +178,3 @@ Lebedeva ES, (2024). bioinformatics-utils: A comprehensive toolkit for DNA and R
 ## Contact
 
 For any issues or questions, please report directly to the GitHub issue tracker, or contact the author via email at Ekaterinalebedeva2612@gmail.com.
-
