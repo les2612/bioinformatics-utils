@@ -1,0 +1,14 @@
+dna_rna_test.py
+fastq_test.py
+__pycache__/
+example_fastq.py
+utils/__pycache__/
+.ipynb_checkpoints/
+filtered/
+output.fasta
+protein_list.txt
+example_blast_results.txt
+example_multiline_fasta.fasta
+example_fastq.fastq
+pytest_dna_rna_filter.png
+flake8.png
