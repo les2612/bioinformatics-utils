@@ -4,14 +4,14 @@ from utils.dna_rna_helper import (
 )
 from utils.filter_helper import avg_quality, read_fastq as fastq_to_dict, \
     write_fastq, gc_content as filter_gc_content
-from typing import Tuple, Any, List, Union
+from typing import Any, Union
 
 
 def filter_fastq(
     input_fastq: str,
     output_fastq: str,
-    gc_bounds: Tuple[float, float] = (0, 100),
-    length_bounds: Tuple[int, int] = (0, 2**32),
+    gc_bounds: tuple[float, float] = (0, 100),
+    length_bounds: tuple[int, int] = (0, 2**32),
     quality_threshold: float = 0
 ) -> None:
     """
@@ -52,7 +52,7 @@ def filter_fastq(
     write_fastq(output_fastq, filtered_seqs)
 
 
-def run_dna_rna_tools(*args: str, **kwargs: Any) -> Union[str, List[str]]:
+def run_dna_rna_tools(*args: str, **kwargs: Any) -> Union[str, list[str]]:
     """
     Performs various DNA/RNA sequence operations such as transcription,
     complement, reverse complement, and more.
