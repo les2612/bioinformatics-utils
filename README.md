@@ -3,9 +3,9 @@
 **bioinformatics-utils** bioinformatics-utils is a comprehensive toolkit for performing basic operations and analyses on DNA and RNA sequences. It provides functionality for filtering FASTQ sequences based on GC content, sequence length, and quality score, as well as utilities for sequence transformations like transcription, reverse complement, palindrome checking, and more. It also includes utility functions for processing FASTA and BLAST output files.
 
 ## Authors:
-- **Software Development**: [Your Name], [Your Institution]
-- **Testing**: [Collaborator Name], [Institution]
-- **Supervisor**: [Supervisor Name], [Institution]
+- **Software Development**: Ekaterina Lebedeva, Bioinformatics Institute
+- **Testing**: Ekaterina Lebedeva, Artyom Ershov, IvanKozlov98,  Bioinformatics Institute
+- **Supervisor**: Nikita Vaulin, Bioinformatics Institute
 
 ---
 
