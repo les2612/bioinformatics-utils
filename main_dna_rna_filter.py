@@ -9,19 +9,39 @@ class BiologicalSequence(ABC):
     """Abstract base class for all biological sequences."""
 
     def __init__(self, sequence: str):
+        """
+        Initialize a biological sequence.
+
+        :param sequence: Nucleotide or amino acid sequence string.
+        """
         self.sequence = sequence
 
+    @abstractmethod
     def __len__(self) -> int:
-        return len(self.sequence)
+        """
+        Return the length of the sequence.
+        """
+        pass
 
+    @abstractmethod
     def __getitem__(self, index):
-        return self.sequence[index]
+        """
+        Return the nucleotide or amino acid at the specified index.
+        """
+        pass
 
+    @abstractmethod
     def __str__(self) -> str:
-        return f"{self.__class__.__name__}: {self.sequence}"
+        """
+        Return a string representation of the sequence.
+        """
+        pass
 
     @abstractmethod
     def check_alphabet(self) -> bool:
+        """
+        Check whether the sequence contains only valid characters.
+        """
         pass
 
 
@@ -30,6 +50,10 @@ class MolecularSequence(BiologicalSequence):
     valid_characters = set()
 
     def check_alphabet(self) -> bool:
+        """
+        Check if all characters in the sequence belong to the valid
+        character set.
+        """
         return set(self.sequence.upper()).issubset(self.valid_characters)
 
 
@@ -38,6 +62,17 @@ class NucleicAcidSequence(MolecularSequence):
     complement_map = {}
 
     def __init__(self, sequence: str):
+        """
+    Initialize a nucleic acid sequence.
+
+    This constructor prevents direct instantiation of the abstract base class
+    NucleicAcidSequence. It should only be called from a subclass
+    (e.g. DNASequence or RNASequence).
+
+    :param sequence: The nucleotide sequence string.
+    :raises NotImplementedError: If attempting to instantiate
+    NucleicAcidSequence directly.
+    """
         if self.__class__ == NucleicAcidSequence:
             raise NotImplementedError(
                 "NucleicAcidSequence is an abstract class and cannot be "
@@ -46,18 +81,34 @@ class NucleicAcidSequence(MolecularSequence):
         super().__init__(sequence)
 
     def complement(self) -> "NucleicAcidSequence":
+        """
+        Return the complement of the sequence.
+
+        :return: Complemented sequence as the same subclass.
+        """
         return self.__class__(
             "".join(self.complement_map.get(base, base)
                     for base in self.sequence)
             )
 
     def reverse(self) -> "NucleicAcidSequence":
+        """
+        Return the reversed sequence.
+        """
         return self.__class__(self.sequence[::-1])
 
     def reverse_complement(self) -> "NucleicAcidSequence":
+        """
+        Return the reverse complement of the sequence.
+        """
         return self.complement().reverse()
 
     def gc_content(self) -> float:
+        """
+        Calculate the GC content (%) of the sequence.
+
+        :return: GC content as a float percentage.
+        """
         if not self.sequence:
             raise ValueError(
                 "GC content cannot be calculated for an empty sequence."
@@ -65,6 +116,12 @@ class NucleicAcidSequence(MolecularSequence):
         return gc_fraction(self.sequence) * 100
 
     def melting_temperature(self) -> int:
+        """
+        Estimate the melting temperature of the sequence using the
+        Wallace rule.
+
+        :return: Melting temperature in Celsius.
+        """
         if not self.sequence:
             raise ValueError(
                 "Melting temperature cannot be calculated "
@@ -82,6 +139,11 @@ class DNASequence(NucleicAcidSequence):
     valid_characters = {"A", "T", "G", "C"}
 
     def transcribe(self) -> "RNASequence":
+        """
+        Transcribe the DNA sequence into RNA.
+
+        :return: Corresponding RNASequence with 'T' replaced by 'U'.
+        """
         return RNASequence(self.sequence.replace("T", "U"))
 
 
@@ -96,6 +158,11 @@ class AminoAcidSequence(MolecularSequence):
     valid_characters = set("ACDEFGHIKLMNPQRSTVWY")
 
     def molecular_weight(self) -> float:
+        """
+        Calculate the approximate molecular weight of the protein sequence.
+
+        :return: Molecular weight in Daltons (Da).
+        """
         amino_acid_weights = {
             "A": 89.1, "C": 121.2, "D": 133.1, "E": 147.1,
             "F": 165.2, "G": 75.1, "H": 155.2, "I": 131.2,
