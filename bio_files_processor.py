@@ -96,19 +96,30 @@ def parse_blast_output(
 
 
 if __name__ == "__main__":
-    input_fasta = "example_multiline_fasta.fasta"
-    output_fasta = "output.fasta"
-    input_file = "example_blast_results.txt"
-    output_file = "protein_list.txt"
-
-    print("Выберите функцию для запуска:")
+    print("Select a function to run:")
     print("1 - convert_multiline_fasta_to_oneline")
     print("2 - parse_blast_output")
-    choice = input("Введите 1 или 2: ")
+    choice = input("Please enter 1 or 2: ")
 
     if choice == "1":
+        input_fasta = input(
+            "Enter path to input FASTA file"
+            "(default: examples/example_multiline_fasta.fasta): "
+            ) or "examples/example_multiline_fasta.fasta"
+        output_fasta = input(
+            "Enter path to output FASTA file (default: "
+            "examples/output_oneline_fasta.fasta): "
+            ) or "examples/output_oneline_fasta.fasta"
         convert_multiline_fasta_to_oneline(input_fasta, output_fasta)
     elif choice == "2":
+        input_file = input(
+            "Enter path to BLAST output file "
+            "(default: examples/example_blast_results.txt): "
+            ) or "examples/example_blast_results.txt"
+        output_file = input(
+            "Enter path to output protein list "
+            "(default: examples/protein_list.txt): "
+            ) or "examples/protein_list.txt"
         parse_blast_output(input_file, output_file)
     else:
-        print("Неверный выбор. Запустите скрипт снова.")
+        print("Invalid selection. Please run the script again.")
