@@ -3,6 +3,16 @@ from Bio import SeqIO
 from Bio.SeqUtils import gc_fraction
 from Bio.SeqRecord import SeqRecord
 from typing import Tuple, List
+import logging
+import os
+
+
+os.makedirs("logs", exist_ok=True)
+logging.basicConfig(
+    filename="logs/filter.log",
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
 
 
 class BiologicalSequence(ABC):
@@ -192,6 +202,11 @@ class FastqFilter:
         :param length_bounds: Sequence length range.
         :param quality_threshold: Minimum average quality score.
         """
+        if gc_bounds[0] > gc_bounds[1]:
+            raise ValueError(
+                f"Invalid GC bounds: {gc_bounds}."
+                f"Lower bound cannot be greater than upper bound."
+                )
         self.gc_bounds = gc_bounds
         self.length_bounds = length_bounds
         self.quality_threshold = quality_threshold
@@ -261,7 +276,9 @@ class FastqFilter:
                 filtered_records.append(record)
 
             except ValueError as e:
-                print(f"Warning: {e}")
+                error_message = f"Record {record.id}: {e}"
+                print(f"Warning: {error_message}")
+                logging.error(error_message)
 
         return filtered_records
 
@@ -287,5 +304,9 @@ class FastqFilter:
         :param filtered_records: List of filtered sequences.
         """
         SeqIO.write(filtered_records, output_fastq, "fastq")
-        print(f"Filtered {len(filtered_records)}"
-              f"reads saved to {output_fastq}.")
+        message = (
+            f"Filtered {len(filtered_records)} "
+            f"reads saved to {output_fastq}."
+            )
+        print(message)
+        logging.info(message)
